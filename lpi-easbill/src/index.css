@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+@theme {
+  --color-brand: #1D4ED8;
+  --color-brand-light: #EFF6FF;
+  --color-brand-dark: #1E3A8A;
+  --color-paper: #F8FAFC;
+  --color-border: #E2E8F0;
+  --color-ink: #0F172A;
+  --color-ink-muted: #64748B;
+  --color-status-paid: #16A34A;
+  --color-status-pending: #D97706;
+  --color-status-overdue: #DC2626;
+  --color-sidebar: #0B1739;
+  --color-sidebar-hover: #16224D;
+
+  --font-display: "Poppins", sans-serif;
+  --font-body: "Poppins", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.tabular-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  #invoice-print-area, #invoice-print-area * {
+    visibility: visible;
+  }
+  #invoice-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
