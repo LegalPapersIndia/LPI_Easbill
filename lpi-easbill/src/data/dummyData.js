@@ -394,7 +394,7 @@ export const invoicePrintSettings = {
   showItemDiscount: true,
   showShippingAddress: true,
   roundOffTotal: true,
-  invoiceTemplate: "Standard",
+  invoiceTemplate: "Elegant",
   additionalNotes: "Thank you for your business!",
 };
 
@@ -465,5 +465,14 @@ export const quotationLineItemsSample = {
 export const purchaseOrderLineItemsSample = {
   "po1": [
     { name: "A4 Legal Paper Bundle", hsnCode: "4802", qty: 15, unit: "box", rate: 320, gstPercent: 12 },
+  ],
+};
+
+export const purchaseLineItemsSample = {
+  "pi1": [
+    { name: "A4 Legal Paper Bundle", hsnCode: "4802", qty: 20, unit: "box", rate: 320, gstPercent: 12 },
+  ],
+  "pi2": [
+    { name: "Notary Seal Kit", hsnCode: "8442", qty: 5, unit: "pcs", rate: 480, gstPercent: 18 },
   ],
 };

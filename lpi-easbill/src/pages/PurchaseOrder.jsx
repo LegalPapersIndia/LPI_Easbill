@@ -6,11 +6,12 @@ import PurchaseLineItems from "../components/purchase/PurchaseLineItems";
 import InvoiceTotals from "../components/invoice/InvoiceTotals";
 import PurchaseOrderFooter from "../components/purchase/PurchaseOrderFooter";
 import { contactsList, businessSettings } from "../data/dummyData";
+import { getFinancialYear } from "../utils/financialYear";
 
 const newLine = () => ({ id: `line-${Date.now()}-${Math.random()}`, itemId: "", name: "", hsnCode: "", unit: "", qty: 1, rate: 0, gstPercent: 0 });
 
 export default function PurchaseOrder() {
-  const [poNo] = useState(`PO-2026-${String(Math.floor(Math.random() * 900) + 100)}`);
+  const [poNo] = useState(`PO/${getFinancialYear()}/${String(Math.floor(Math.random() * 900) + 100)}`);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [validTillDays, setValidTillDays] = useState(30);
   const [supplierId, setSupplierId] = useState("");

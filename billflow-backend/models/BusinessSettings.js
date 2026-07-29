@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 
 const businessSettingsSchema = new mongoose.Schema(
   {
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
+
     businessName: { type: String, required: true },
     logo: { type: String, default: "" },
 
@@ -21,7 +28,6 @@ const businessSettingsSchema = new mongoose.Schema(
     registrationType: { type: String, default: "" },
     panNumber: { type: String, default: "" },
 
-    // Bank Account Details
     accountHolderName: { type: String, default: "" },
     bankName: { type: String, default: "" },
     accountNumber: { type: String, default: "" },
@@ -29,10 +35,8 @@ const businessSettingsSchema = new mongoose.Schema(
     branchName: { type: String, default: "" },
     paymentQrCode: { type: String, default: "" },
 
-    // Signature
     signature: { type: String, default: "" },
 
-    // Invoice Settings
     invoicePrefix: { type: String, default: "INV" },
     invoiceStartNumber: { type: Number, default: 1 },
     defaultTerms: { type: String, default: "" },

@@ -75,28 +75,27 @@ export default function Register() {
     }
   };
 
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    setError("");
+const handleVerifyOtp = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    if (otp.length !== 6) {
-      setError("Please enter 6 digit OTP");
-      return;
-    }
+  if (otp.length !== 6) {
+    setError("Please enter 6 digit OTP");
+    return;
+  }
 
-    try {
-      setLoading(true);
-      const { data } = await verifyRegister({ phone: formData.phone, otp });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || "Invalid OTP");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  try {
+    setLoading(true);
+    const { data } = await verifyRegister({ phone: formData.phone, otp });
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    navigate("/settings/business");   // ← YE LINE BADLI HAI
+  } catch (err) {
+    setError(err.response?.data?.message || "Invalid OTP");
+  } finally {
+    setLoading(false);
+  }
+};
   const handleResendOtp = async () => {
     if (!canResend) return;
     try {

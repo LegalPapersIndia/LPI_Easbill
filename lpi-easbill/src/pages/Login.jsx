@@ -33,7 +33,12 @@ export default function Login() {
       const { data } = await loginUser(formData);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/dashboard");
+
+      if (data.user.companyId) {
+        navigate("/dashboard");
+      } else {
+  navigate("/settings/business");
+}
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

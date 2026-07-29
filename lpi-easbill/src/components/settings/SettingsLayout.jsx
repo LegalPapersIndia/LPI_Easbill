@@ -3,7 +3,7 @@ import { Building2, Users, UserCircle, FileText } from "lucide-react";
 
 const settingsNav = [
   { label: "Business Settings", icon: Building2, path: "/settings/business" },
-  { label: "Manage Users", icon: Users, path: "/settings/users" },
+  // { label: "Manage Users", icon: Users, path: "/settings/users" },
   { label: "My Profile", icon: UserCircle, path: "/settings/profile" },
   { label: "Invoice Settings", icon: FileText, path: "/settings/invoice" },
 ];

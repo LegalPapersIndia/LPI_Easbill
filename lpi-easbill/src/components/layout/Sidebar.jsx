@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Users, Package, FileText, ShoppingCart,
-  RotateCcw, Wallet, BarChart3, Settings, X, ChevronDown,
+  RotateCcw, Wallet, BarChart3, Settings, X, ChevronDown, LogOut,
 } from "lucide-react";
 
 const navItems = [
@@ -31,10 +31,17 @@ const navItems = [
 
 export default function Sidebar({ open, onClose }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState({ sales: false, purchase: false });
 
   const isChildActive = (children) => children.some((c) => location.pathname === c.path);
   const toggleGroup = (key) => setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
     <>
@@ -110,6 +117,16 @@ export default function Sidebar({ open, onClose }) {
             );
           })}
         </nav>
+
+        <div className="px-3 pb-3 shrink-0">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/70 hover:bg-sidebar-hover hover:text-white transition-colors"
+          >
+            <LogOut size={18} />
+            Logout
+          </button>
+        </div>
 
         <div className="p-4 border-t border-sidebar-hover text-xs text-white/50 shrink-0">
           Legal Papers India · v1.0

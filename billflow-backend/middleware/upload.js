@@ -33,4 +33,14 @@ const upload = multer({
   },
 });
 
+// ─────────────────────────────────────────
+// BUSINESS SETTINGS — 3 IMAGES EK SAATH
+// logo + signature + paymentQrCode
+// ─────────────────────────────────────────
+export const uploadBusinessImages = upload.fields([
+  { name: "logo", maxCount: 1 },
+  { name: "signature", maxCount: 1 },
+  { name: "paymentQrCode", maxCount: 1 },
+]);
+
 export default upload;

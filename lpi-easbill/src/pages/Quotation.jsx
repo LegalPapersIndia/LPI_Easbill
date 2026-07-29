@@ -6,11 +6,12 @@ import InvoiceLineItems from "../components/invoice/InvoiceLineItems";
 import InvoiceTotals from "../components/invoice/InvoiceTotals";
 import QuotationFooter from "../components/invoice/QuotationFooter";
 import { contactsList, businessSettings } from "../data/dummyData";
+import { getFinancialYear } from "../utils/financialYear";
 
 const newLine = () => ({ id: `line-${Date.now()}-${Math.random()}`, itemId: "", name: "", hsnCode: "", unit: "", qty: 1, rate: 0, gstPercent: 0 });
 
 export default function Quotation() {
-  const [quotationNo] = useState(`QUO-2026-${String(Math.floor(Math.random() * 900) + 100)}`);
+ const [quotationNo] = useState(`QUO/${getFinancialYear()}/${String(Math.floor(Math.random() * 900) + 100)}`);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [validDays, setValidDays] = useState(30);
   const [customerId, setCustomerId] = useState("");

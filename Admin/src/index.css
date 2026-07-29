@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@keyframes spin-border {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.spin-border-active {
+  animation: spin-border 2s linear infinite;
+}
+
+/* Date input calendar icon white */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
