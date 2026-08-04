@@ -1,14 +1,17 @@
+
+
 // import { useState, useEffect } from "react";
 // import { X, FileText, Boxes, Wallet } from "lucide-react";
-// import { categories, unitOptions } from "../../data/dummyData";
+// import { unitOptions } from "../../data/dummyData";
 // import BasicDetailsTab from "./tabs/BasicDetailsTab";
 // import StockDetailsTab from "./tabs/StockDetailsTab";
 // import PricingDetailsTab from "./tabs/PricingDetailsTab";
 
 // const emptyForm = {
-//   itemType: "Product", name: "", sku: "", category: "",
+//   itemType: "Product", name: "", sku: "", group: "", brand: "",
 //   purchasePrice: "", purchasePriceType: "without_tax",
 //   salePrice: "", salePriceType: "with_tax",
+//   serviceCharge: "", minServiceCharge: "",
 //   gstPercent: 0, discountPercent: 0, hsnCode: "",
 //   stockQty: "", unit: "PCS", altUnit: "",
 //   lowStockEnabled: false, lowStockThreshold: 0,
@@ -21,7 +24,7 @@
 //   { key: "pricing", label: "Pricing Details", icon: Wallet },
 // ];
 
-// export default function ItemFormModal({ open, onClose, onSave, editingItem }) {
+// export default function ItemFormModal({ open, onClose, onSave, editingItem, groups, brands, onAddGroup, onAddBrand }) {
 //   const [form, setForm] = useState(emptyForm);
 //   const [activeTab, setActiveTab] = useState("basic");
 
@@ -45,6 +48,7 @@
 //     onSave({
 //       ...form,
 //       _id: editingItem?._id || `itm${Date.now()}`,
+//       category: form.group, // backward-compat, purani ItemsTable/filter "category" use karta hai
 //       purchasePrice: Number(form.purchasePrice) || 0,
 //       salePrice: Number(form.salePrice) || 0,
 //       gstPercent: Number(form.gstPercent) || 0,
@@ -68,7 +72,6 @@
 //         </div>
 
 //         <form onSubmit={handleSubmit} className="flex-1 overflow-hidden flex flex-col sm:flex-row min-h-0">
-//           {/* Tabs — mobile pe horizontal scroll, desktop pe left sidebar */}
 //           <div className="sm:w-52 shrink-0 border-b sm:border-b-0 sm:border-r border-border">
 //             <div className="flex sm:flex-col overflow-x-auto sm:overflow-visible p-3 gap-1">
 //               {tabs.map(({ key, label, icon: Icon }) => (
@@ -86,10 +89,17 @@
 //             </div>
 //           </div>
 
-//           {/* Tab Content */}
 //           <div className="flex-1 overflow-y-auto p-5 min-h-0">
 //             {activeTab === "basic" && (
-//               <BasicDetailsTab form={form} onChange={handleChange} categories={categories} unitOptions={unitOptions} />
+//               <BasicDetailsTab
+//                 form={form}
+//                 onChange={handleChange}
+//                 groups={groups}
+//                 brands={brands}
+//                 onAddGroup={onAddGroup}
+//                 onAddBrand={onAddBrand}
+//                 unitOptions={unitOptions}
+//               />
 //             )}
 //             {activeTab === "stock" && (
 //               <StockDetailsTab form={form} onChange={handleChange} unitOptions={unitOptions} />
@@ -114,6 +124,7 @@
 //     </div>
 //   );
 // }
+
 
 
 
@@ -144,6 +155,7 @@ const tabs = [
 export default function ItemFormModal({ open, onClose, onSave, editingItem, groups, brands, onAddGroup, onAddBrand }) {
   const [form, setForm] = useState(emptyForm);
   const [activeTab, setActiveTab] = useState("basic");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -156,24 +168,29 @@ export default function ItemFormModal({ open, onClose, onSave, editingItem, grou
 
   const handleChange = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name) {
       setActiveTab("basic");
       return alert("Item Name zaroori hai");
     }
-    onSave({
-      ...form,
-      _id: editingItem?._id || `itm${Date.now()}`,
-      category: form.group, // backward-compat, purani ItemsTable/filter "category" use karta hai
-      purchasePrice: Number(form.purchasePrice) || 0,
-      salePrice: Number(form.salePrice) || 0,
-      gstPercent: Number(form.gstPercent) || 0,
-      discountPercent: Number(form.discountPercent) || 0,
-      stockQty: Number(form.stockQty) || 0,
-      lowStockThreshold: Number(form.lowStockThreshold) || 0,
-    });
-    onClose();
+    try {
+      setSaving(true);
+      await onSave({
+        ...form,
+        purchasePrice: Number(form.purchasePrice) || 0,
+        salePrice: Number(form.salePrice) || 0,
+        serviceCharge: Number(form.serviceCharge) || 0,
+        minServiceCharge: Number(form.minServiceCharge) || 0,
+        gstPercent: Number(form.gstPercent) || 0,
+        discountPercent: Number(form.discountPercent) || 0,
+        stockQty: Number(form.stockQty) || 0,
+        lowStockThreshold: Number(form.lowStockThreshold) || 0,
+      });
+      onClose();
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -232,9 +249,9 @@ export default function ItemFormModal({ open, onClose, onSave, editingItem, grou
             className="flex-1 sm:flex-none border border-border text-ink-muted font-medium px-5 py-2.5 rounded-lg text-sm hover:bg-paper transition-colors">
             Cancel
           </button>
-          <button type="submit" onClick={handleSubmit}
-            className="flex-1 sm:flex-none sm:ml-auto bg-brand text-white font-medium px-5 py-2.5 rounded-lg text-sm hover:bg-brand-dark transition-colors">
-            {editingItem ? "Save Changes" : "Save Item"}
+          <button type="submit" onClick={handleSubmit} disabled={saving}
+            className="flex-1 sm:flex-none sm:ml-auto bg-brand text-white font-medium px-5 py-2.5 rounded-lg text-sm hover:bg-brand-dark transition-colors disabled:opacity-60">
+            {saving ? "Saving..." : editingItem ? "Save Changes" : "Save Item"}
           </button>
         </div>
       </div>

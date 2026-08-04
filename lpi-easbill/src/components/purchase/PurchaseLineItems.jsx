@@ -1,3 +1,6 @@
+
+
+
 // import { Plus, Trash2 } from "lucide-react";
 // import { itemsList } from "../../data/dummyData";
 
@@ -9,7 +12,8 @@
 //       itemId: item._id,
 //       name: item.name,
 //       hsnCode: item.hsnCode,
-//       rate: item.purchasePrice, 
+//       unit: item.unit,
+//       rate: item.purchasePrice,
 //       gstPercent: item.gstPercent,
 //       qty: 1,
 //     });
@@ -20,12 +24,13 @@
 //       <p className="font-display font-semibold text-ink mb-4">Items</p>
 
 //       <div className="overflow-x-auto -mx-4 sm:mx-0">
-//         <table className="w-full min-w-180 text-sm">
+//         <table className="w-full min-w-200 text-sm">
 //           <thead>
 //             <tr className="text-left text-ink-muted border-b border-border">
 //               <th className="py-2 px-4 sm:px-0 font-medium w-1/3">Item</th>
 //               <th className="py-2 px-2 font-medium text-right w-20">HSN</th>
 //               <th className="py-2 px-2 font-medium text-right w-16">Qty</th>
+//               <th className="py-2 px-2 font-medium text-left w-16">Unit</th>
 //               <th className="py-2 px-2 font-medium text-right w-24">Rate</th>
 //               <th className="py-2 px-2 font-medium text-right w-16">GST%</th>
 //               <th className="py-2 px-2 font-medium text-right w-28">Amount</th>
@@ -60,6 +65,9 @@
 //                       onChange={(e) => onUpdateLine(line.id, { qty: Number(e.target.value) })}
 //                       className="w-full border border-border rounded-lg px-2 py-1.5 text-sm text-right outline-none focus:border-brand tabular-num"
 //                     />
+//                   </td>
+//                   <td className="py-2 px-2 text-ink-muted uppercase text-xs">
+//                     {line.unit || "-"}
 //                   </td>
 //                   <td className="py-2 px-2">
 //                     <input
@@ -100,11 +108,9 @@
 
 
 
-
 import { Plus, Trash2 } from "lucide-react";
-import { itemsList } from "../../data/dummyData";
 
-export default function PurchaseLineItems({ lines, onAddLine, onRemoveLine, onUpdateLine }) {
+export default function PurchaseLineItems({ lines, onAddLine, onRemoveLine, onUpdateLine, itemsList }) {
   const handleItemSelect = (lineId, itemId) => {
     const item = itemsList.find((i) => i._id === itemId);
     if (!item) return;

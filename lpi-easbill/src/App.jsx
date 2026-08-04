@@ -217,10 +217,12 @@ import PaymentCreate from "./pages/PaymentCreate";
 import MyProfile from "./pages/settings/MyProfile";
 import InvoiceSettings from "./pages/settings/InvoiceSettings";
 import InvoicePrintPreview from "./pages/InvoicePrintPreview";
+import { BusinessProvider } from "./context/BusinessContext";
 
 function App() {
   return (
     <SettingsProvider>
+       <BusinessProvider>
       <BrowserRouter>
         <Routes>
           {/* PUBLIC ROUTES */}
@@ -377,6 +379,7 @@ function App() {
           <Route path="/print/invoice/:id" element={<InvoicePrintPreview />} />
         </Routes>
       </BrowserRouter>
+      </BusinessProvider>
     </SettingsProvider>
   );
 }

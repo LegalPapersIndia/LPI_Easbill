@@ -1,3 +1,5 @@
+
+
 // import BusinessSettings from "../models/BusinessSettings.js";
 // import User from "../models/User.js";
 // import { uploadToCloudinary } from "../utils/cloudinary.utils.js";
@@ -16,6 +18,15 @@
 //     }
 
 //     const data = { ...req.body, ownerId: req.userId };
+
+//     // ── businessType STRING SE ARRAY MEIN PARSE KARO ──
+//     if (data.businessType && typeof data.businessType === "string") {
+//       try {
+//         data.businessType = JSON.parse(data.businessType);
+//       } catch {
+//         data.businessType = [data.businessType];
+//       }
+//     }
 
 //     // ── IMAGE UPLOADS (agar files aayi hain) ──
 //     if (req.files?.logo) {
@@ -82,6 +93,15 @@
 //   try {
 //     const data = { ...req.body };
 
+//     // ── businessType STRING SE ARRAY MEIN PARSE KARO ──
+//     if (data.businessType && typeof data.businessType === "string") {
+//       try {
+//         data.businessType = JSON.parse(data.businessType);
+//       } catch {
+//         data.businessType = [data.businessType];
+//       }
+//     }
+
 //     if (req.files?.logo) {
 //       const result = await uploadToCloudinary(req.files.logo[0].buffer, "billflow/logo");
 //       data.logo = result.secure_url;
@@ -123,9 +143,11 @@
 
 
 
+
+
 import BusinessSettings from "../models/BusinessSettings.js";
 import User from "../models/User.js";
-import { uploadToCloudinary } from "../utils/cloudinary.utils.js";
+import { uploadToCloudinary, deleteFromCloudinary } from "../utils/cloudinary.utils.js";
 
 // ─────────────────────────────────────────
 // CREATE BUSINESS SETTINGS (Onboarding)
@@ -133,11 +155,12 @@ import { uploadToCloudinary } from "../utils/cloudinary.utils.js";
 export const createBusinessSettings = async (req, res) => {
   try {
     const existing = await BusinessSettings.findOne({ ownerId: req.userId });
+
+    // ── AB EK EMPTY BusinessSettings HAMESHA REGISTRATION SE HI BAN CHUKI HOTI HAI ──
+    // Isliye "already exists" error dena galat hoga — us case mein hum seedha
+    // UPDATE kar denge, taaki user ko koi error na dikhe aur onboarding smooth rahe
     if (existing) {
-      return res.status(400).json({
-        success: false,
-        message: "Business Settings already exists for this account",
-      });
+      return updateBusinessSettings(req, res);
     }
 
     const data = { ...req.body, ownerId: req.userId };
@@ -225,31 +248,42 @@ export const updateBusinessSettings = async (req, res) => {
       }
     }
 
+    // ── Jab bhi user isको save karega, matlab uski setup complete ho rahi hai ──
+    data.isSetupComplete = true;
+
+    // ── PURANI SETTINGS DHUNDO — taaki update se pehle purani images ka pata chale ──
+    const existingSettings = await BusinessSettings.findOne({ ownerId: req.userId });
+
     if (req.files?.logo) {
       const result = await uploadToCloudinary(req.files.logo[0].buffer, "billflow/logo");
       data.logo = result.secure_url;
+      if (existingSettings?.logo) {
+        const publicId = existingSettings.logo.split("/").slice(-1)[0].split(".")[0];
+        await deleteFromCloudinary(`billflow/logo/${publicId}`).catch(() => {});
+      }
     }
     if (req.files?.signature) {
       const result = await uploadToCloudinary(req.files.signature[0].buffer, "billflow/signature");
       data.signature = result.secure_url;
+      if (existingSettings?.signature) {
+        const publicId = existingSettings.signature.split("/").slice(-1)[0].split(".")[0];
+        await deleteFromCloudinary(`billflow/signature/${publicId}`).catch(() => {});
+      }
     }
     if (req.files?.paymentQrCode) {
       const result = await uploadToCloudinary(req.files.paymentQrCode[0].buffer, "billflow/qr");
       data.paymentQrCode = result.secure_url;
+      if (existingSettings?.paymentQrCode) {
+        const publicId = existingSettings.paymentQrCode.split("/").slice(-1)[0].split(".")[0];
+        await deleteFromCloudinary(`billflow/qr/${publicId}`).catch(() => {});
+      }
     }
 
     const businessSettings = await BusinessSettings.findOneAndUpdate(
       { ownerId: req.userId },
       data,
-      { new: true }
+      { new: true, upsert: true }
     );
-
-    if (!businessSettings) {
-      return res.status(404).json({
-        success: false,
-        message: "Business Settings not found",
-      });
-    }
 
     res.status(200).json({
       success: true,

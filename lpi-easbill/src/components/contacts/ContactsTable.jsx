@@ -12,7 +12,7 @@ export default function ContactsTable({ contacts, onEdit, onDelete }) {
   return (
     <div className="bg-white border border-border rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[680px] text-sm">
+        <table className="w-full min-w-170 text-sm">
           <thead>
             <tr className="text-left text-ink-muted bg-paper border-b border-border">
               <th className="py-3 px-4 font-medium">Name</th>
