@@ -12,6 +12,7 @@ import purchaseInvoiceRoutes from "./routes/purchaseInvoiceRoutes.js";
 import quotationRoutes from "./routes/quotationRoutes.js";
 import purchaseOrderRoutes from "./routes/purchaseOrderRoutes.js";
 import returnRoutes from "./routes/returnRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -31,6 +32,7 @@ app.use("/api/purchase-invoice", purchaseInvoiceRoutes);
 app.use("/api/quotation", quotationRoutes);
 app.use("/api/purchase-order", purchaseOrderRoutes);
 app.use("/api/returns", returnRoutes);
+app.use("/api/payments", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.send("BillFlow API is running...");
