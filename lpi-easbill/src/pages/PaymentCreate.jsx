@@ -219,7 +219,7 @@ export default function PaymentCreate() {
             Record Payment {type === "in" ? "In" : "Out"}
           </h1>
           <p className="text-sm text-ink-muted mt-1">
-            {type === "in" ? "Customer se aaya paisa record karo." : "Supplier ko diya paisa record karo."}
+            {type === "in" ? "Record the money received from the customer." : "Record the payment made to the supplier."}
           </p>
         </div>
         <button

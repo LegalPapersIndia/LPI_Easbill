@@ -61,7 +61,7 @@ export default function ReturnsListTable({ returns, type, onDelete }) {
   if (returns.length === 0) {
     return (
       <div className="bg-white border border-border rounded-xl p-10 text-center">
-        <p className="text-ink-muted text-sm">Koi {type} return nahi mila.</p>
+        <p className="text-ink-muted text-sm">Koi {type}I didn't get any return.</p>
       </div>
     );
   }
@@ -96,7 +96,7 @@ export default function ReturnsListTable({ returns, type, onDelete }) {
                 </td>
                 <td className="py-3 px-4">
                   <div className="flex items-center justify-end gap-2">
-                    <button className="text-ink-muted hover:text-brand transition-colors"><Eye size={16} /></button>
+                    {/* <button className="text-ink-muted hover:text-brand transition-colors"><Eye size={16} /></button> */}
                     <button onClick={() => onDelete(r._id)} className="text-ink-muted hover:text-status-overdue transition-colors"><Trash2 size={16} /></button>
                   </div>
                 </td>

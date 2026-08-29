@@ -7,7 +7,7 @@ export default function InvoiceSettings() {
     <DashboardLayout>
       <div className="mb-6">
         <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Invoice Settings</h1>
-        <p className="text-sm text-ink-muted mt-1">Invoice print/PDF layout customize karo.</p>
+        <p className="text-sm text-ink-muted mt-1">Invoice print/PDF layout by customizing it.</p>
       </div>
 
       <SettingsLayout>

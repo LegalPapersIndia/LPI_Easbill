@@ -576,7 +576,7 @@ export default function ReturnCreate() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">New Return</h1>
-          <p className="text-sm text-ink-muted mt-1">Kisi existing invoice ka return record karo.</p>
+          <p className="text-sm text-ink-muted mt-1">Record a return for an existing invoice.</p>
         </div>
         <button
           onClick={() => navigate("/returns")}

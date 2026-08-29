@@ -7,7 +7,7 @@ export default function MyProfile() {
     <DashboardLayout>
       <div className="mb-6">
         <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">My Profile</h1>
-        <p className="text-sm text-ink-muted mt-1">Apni profile details aur password manage karo.</p>
+        <p className="text-sm text-ink-muted mt-1">Manage your profile details and password.</p>
       </div>
 
       <SettingsLayout>

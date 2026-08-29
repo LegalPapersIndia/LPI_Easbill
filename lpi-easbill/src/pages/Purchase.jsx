@@ -240,7 +240,7 @@ export default function Purchase() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">New Purchase Invoice</h1>
-          <p className="text-sm text-ink-muted mt-1">Supplier se aaya hua maal record karo.</p>
+          <p className="text-sm text-ink-muted mt-1">Record the goods received from the supplier.</p>
         </div>
       </div>
 

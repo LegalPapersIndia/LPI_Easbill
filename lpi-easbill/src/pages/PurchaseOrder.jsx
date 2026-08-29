@@ -223,7 +223,7 @@ export default function PurchaseOrder() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">New Purchase Order</h1>
-          <p className="text-sm text-ink-muted mt-1">Supplier ko order bhejo, invoice se pehle.</p>
+          <p className="text-sm text-ink-muted mt-1">Sent the order to the supplier before the invoice.</p>
         </div>
       </div>
 

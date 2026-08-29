@@ -140,7 +140,7 @@ export default function PurchaseList() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Purchase Invoices</h1>
-          <p className="text-sm text-ink-muted mt-1">Sabhi purchase invoices ka record.</p>
+          <p className="text-sm text-ink-muted mt-1">Record of all purchase invoices.</p>
         </div>
         <button
           onClick={() => navigate("/purchase/new")}

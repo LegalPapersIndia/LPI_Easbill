@@ -94,7 +94,7 @@ export default function ReturnsList() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Returns</h1>
-          <p className="text-sm text-ink-muted mt-1">Sales aur Purchase returns ka record.</p>
+          <p className="text-sm text-ink-muted mt-1">Record of sales and purchase returns.</p>
         </div>
         <button
           onClick={() => navigate(`/returns/new?type=${type}`)}

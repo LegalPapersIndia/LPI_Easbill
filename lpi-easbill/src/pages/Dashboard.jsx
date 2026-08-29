@@ -84,7 +84,7 @@ export default function Dashboard() {
     <DashboardLayout>
       <div className="mb-6">
         <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Dashboard</h1>
-        <p className="text-sm text-ink-muted mt-1">Aapke business ka overview, aaj tak ka.</p>
+        <p className="text-sm text-ink-muted mt-1">An overview of your business, to date.</p>
       </div>
 
       <QuickActions />

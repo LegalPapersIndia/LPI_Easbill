@@ -142,7 +142,7 @@ export default function PurchaseOrderList() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Purchase Orders</h1>
-          <p className="text-sm text-ink-muted mt-1">Suppliers ko bheje gaye orders.</p>
+          <p className="text-sm text-ink-muted mt-1">Orders sent to suppliers.</p>
         </div>
         <button
           onClick={() => navigate("/purchase-order/new")}

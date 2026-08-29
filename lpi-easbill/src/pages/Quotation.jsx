@@ -223,7 +223,7 @@ export default function Quotation() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">New Quotation</h1>
-          <p className="text-sm text-ink-muted mt-1">Customer ko price estimate bhejo, invoice se pehle.</p>
+          <p className="text-sm text-ink-muted mt-1">Sent a price estimate to the customer before the invoice.</p>
         </div>
       </div>
 

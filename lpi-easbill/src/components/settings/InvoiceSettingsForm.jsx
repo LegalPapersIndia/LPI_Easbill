@@ -120,7 +120,7 @@ export default function InvoiceSettingsForm() {
       {/* Template Selection */}
       <div className="bg-white border border-border rounded-xl p-4 sm:p-5">
         <p className="font-display font-semibold text-ink mb-1">Invoice Template</p>
-        <p className="text-xs text-ink-muted mb-4">Jo template select karoge, wahi turant Print Preview mein dikhega.</p>
+        <p className="text-xs text-ink-muted mb-4">Whichever template you select will immediately appear in the print preview.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {templates.map((t) => {
@@ -151,7 +151,7 @@ export default function InvoiceSettingsForm() {
           Currently selected: <span className="font-medium text-ink">{printSettings.invoiceTemplate}</span>
         </p>
         <p className="text-xs text-ink-muted mt-1">
-          Kisi bhi Sales Invoice, Quotation, Purchase Invoice ya PO ka "Eye" icon click karke ye template turant dekh sakte ho.
+          You can instantly view this template by clicking the "eye" icon on any sales invoice, quotation, purchase invoice, or PO.
         </p>
       </div>
     </div>

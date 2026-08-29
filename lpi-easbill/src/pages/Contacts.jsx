@@ -190,7 +190,7 @@ export default function Contacts() {
     <DashboardLayout>
       <div className="mb-6">
         <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Contacts</h1>
-        <p className="text-sm text-ink-muted mt-1">Apne customers aur suppliers yahan manage karo.</p>
+        <p className="text-sm text-ink-muted mt-1">Manage your customers and suppliers here.</p>
       </div>
 
       {error && (

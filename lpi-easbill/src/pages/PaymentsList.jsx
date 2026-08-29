@@ -138,7 +138,7 @@ export default function PaymentsList() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">Payments</h1>
-          <p className="text-sm text-ink-muted mt-1">Payment In aur Payment Out ka record.</p>
+          <p className="text-sm text-ink-muted mt-1">Record of incoming and outgoing payments.</p>
         </div>
         <button
           onClick={() => navigate(`/payments/new?type=${type}`)}
