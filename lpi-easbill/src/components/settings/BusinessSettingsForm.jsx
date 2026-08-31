@@ -566,7 +566,7 @@ setForm({
         if (err.response?.status === 404) {
           setIsNew(true);
         } else {
-          setError("Business Settings load karne mein error aaya");
+          setError("An error occurred while loading business settings.");
         }
       } finally {
         setLoading(false);

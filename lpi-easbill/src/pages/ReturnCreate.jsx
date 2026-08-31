@@ -491,7 +491,7 @@ export default function ReturnCreate() {
         setInvoicesPool(mapped);
         setItemsList(itemsRes.data.items);
       } catch (err) {
-        setError("Invoices/Items load karne mein error aaya");
+        setError("Invoices/An error occurred while loading items.");
       } finally {
         setLoadingData(false);
       }

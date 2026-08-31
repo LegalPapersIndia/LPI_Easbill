@@ -1,9 +1,10 @@
-// import { contactsList, businessSettings } from "../../data/dummyData";
 
-// export default function QuotationHeader({ quotationNo, date, onDateChange, validDays, onValidDaysChange, customerId, onCustomerChange }) {
-//   const customersOnly = contactsList.filter((c) => c.contactType === "Customer");
-//   const selectedCustomer = customersOnly.find((c) => c._id === customerId);
-//   const isSameState = selectedCustomer?.state === businessSettings.state;
+// import { useBusiness } from "../../context/BusinessContext";
+
+// export default function QuotationHeader({ date, onDateChange, validDays, onValidDaysChange, customerId, onCustomerChange, customers }) {
+//   const { businessSettings } = useBusiness();
+//   const selectedCustomer = customers.find((c) => c._id === customerId);
+//   const isSameState = selectedCustomer?.state === businessSettings?.state;
 
 //   const validityDate = new Date(date);
 //   validityDate.setDate(validityDate.getDate() + Number(validDays || 0));
@@ -11,16 +12,7 @@
 
 //   return (
 //     <div className="bg-white border border-border rounded-xl p-4 sm:p-5 mb-4">
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-//         <div>
-//           <label className="text-xs font-medium text-ink-muted">Quotation No.</label>
-//           <input
-//             value={quotationNo}
-//             readOnly
-//             className="w-full mt-1 border border-border rounded-lg px-3 py-2 text-sm bg-paper tabular-num text-ink font-medium"
-//           />
-//         </div>
-
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 //         <div>
 //           <label className="text-xs font-medium text-ink-muted">Quotation Date</label>
 //           <input
@@ -50,7 +42,7 @@
 //             className="w-full mt-1 border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-brand"
 //           >
 //             <option value="">Select customer</option>
-//             {customersOnly.map((c) => (
+//             {customers.map((c) => (
 //               <option key={c._id} value={c._id}>{c.name}</option>
 //             ))}
 //           </select>
@@ -72,9 +64,8 @@
 // }
 
 
-
-
 import { useBusiness } from "../../context/BusinessContext";
+import SearchableSelect from "../common/SearchableSelect";
 
 export default function QuotationHeader({ date, onDateChange, validDays, onValidDaysChange, customerId, onCustomerChange, customers }) {
   const { businessSettings } = useBusiness();
@@ -111,16 +102,19 @@ export default function QuotationHeader({ date, onDateChange, validDays, onValid
 
         <div>
           <label className="text-xs font-medium text-ink-muted">Customer</label>
-          <select
-            value={customerId}
-            onChange={(e) => onCustomerChange(e.target.value)}
-            className="w-full mt-1 border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-brand"
-          >
-            <option value="">Select customer</option>
-            {customers.map((c) => (
-              <option key={c._id} value={c._id}>{c.name}</option>
-            ))}
-          </select>
+          <div className="mt-1">
+            <SearchableSelect
+              value={customerId}
+              onChange={onCustomerChange}
+              placeholder="Select customer"
+              emptyText="No customer found"
+              options={customers.map((c) => ({
+                value: c._id,
+                label: c.name,
+                subLabel: c.mobile || c.gstin || "",
+              }))}
+            />
+          </div>
         </div>
       </div>
 

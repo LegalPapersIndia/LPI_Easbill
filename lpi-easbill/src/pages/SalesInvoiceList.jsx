@@ -101,7 +101,7 @@ export default function SalesInvoiceList() {
       const { data } = await getSalesInvoices(params);
       setInvoices(data.invoices);
     } catch (err) {
-      setError("Invoices load karne mein error aaya");
+      setError("An error occurred while loading the invoices.");
     } finally {
       setLoading(false);
     }

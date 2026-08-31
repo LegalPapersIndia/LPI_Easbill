@@ -192,7 +192,7 @@ export default function SalesInvoice() {
         setCustomers(contactsRes.data.contacts);
         setItemsList(itemsRes.data.items);
       } catch (err) {
-        setError("Contacts/Items load karne mein error aaya");
+        setError("Contacts/An error occurred while loading items.");
       } finally {
         setLoadingData(false);
       }

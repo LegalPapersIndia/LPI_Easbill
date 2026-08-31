@@ -67,7 +67,7 @@ export default function ReturnsList() {
       const { data } = await getReturns({ type });
       setReturns(data.returns);
     } catch (err) {
-      setError("Returns load karne mein error aaya");
+      setError("An error occurred while loading the returns.");
     } finally {
       setLoading(false);
     }

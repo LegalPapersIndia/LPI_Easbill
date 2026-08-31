@@ -117,7 +117,7 @@ export default function PurchaseOrderList() {
       const { data } = await getPurchaseOrders(params);
       setOrders(data.purchaseOrders);
     } catch (err) {
-      setError("Purchase Orders load karne mein error aaya");
+      setError("An error occurred while loading purchase orders.");
     } finally {
       setLoading(false);
     }
@@ -175,7 +175,7 @@ export default function PurchaseOrderList() {
         </div>
       ) : orders.length === 0 ? (
         <div className="bg-white border border-border rounded-xl p-10 text-center">
-          <p className="text-ink-muted text-sm">Koi purchase order nahi mila.</p>
+          <p className="text-ink-muted text-sm">No purchase order was received.</p>
         </div>
       ) : (
         <div className="bg-white border border-border rounded-xl overflow-hidden">

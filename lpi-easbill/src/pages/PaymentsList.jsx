@@ -111,7 +111,7 @@ export default function PaymentsList() {
       const { data } = await getPayments({ type });
       setPayments(data.payments);
     } catch (err) {
-      setError("Payments load karne mein error aaya");
+      setError("An error occurred while loading payments.");
     } finally {
       setLoading(false);
     }

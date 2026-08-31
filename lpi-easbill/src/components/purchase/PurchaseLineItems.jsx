@@ -1,10 +1,7 @@
 
-
-
 // import { Plus, Trash2 } from "lucide-react";
-// import { itemsList } from "../../data/dummyData";
 
-// export default function PurchaseLineItems({ lines, onAddLine, onRemoveLine, onUpdateLine }) {
+// export default function PurchaseLineItems({ lines, onAddLine, onRemoveLine, onUpdateLine, itemsList }) {
 //   const handleItemSelect = (lineId, itemId) => {
 //     const item = itemsList.find((i) => i._id === itemId);
 //     if (!item) return;
@@ -109,6 +106,7 @@
 
 
 import { Plus, Trash2 } from "lucide-react";
+import SearchableSelect from "../common/SearchableSelect";
 
 export default function PurchaseLineItems({ lines, onAddLine, onRemoveLine, onUpdateLine, itemsList }) {
   const handleItemSelect = (lineId, itemId) => {
@@ -149,16 +147,17 @@ export default function PurchaseLineItems({ lines, onAddLine, onRemoveLine, onUp
               return (
                 <tr key={line.id} className="border-b border-border last:border-0">
                   <td className="py-2 px-4 sm:px-0">
-                    <select
+                    <SearchableSelect
                       value={line.itemId || ""}
-                      onChange={(e) => handleItemSelect(line.id, e.target.value)}
-                      className="w-full border border-border rounded-lg px-2 py-1.5 text-sm outline-none focus:border-brand"
-                    >
-                      <option value="">Select item</option>
-                      {itemsList.map((i) => (
-                        <option key={i._id} value={i._id}>{i.name}</option>
-                      ))}
-                    </select>
+                      onChange={(itemId) => handleItemSelect(line.id, itemId)}
+                      placeholder="Select item"
+                      emptyText="No item found"
+                      options={itemsList.map((i) => ({
+                        value: i._id,
+                        label: i.name,
+                        subLabel: i.hsnCode ? `HSN: ${i.hsnCode}` : "",
+                      }))}
+                    />
                   </td>
                   <td className="py-2 px-2 text-right tabular-num text-ink-muted">
                     {line.hsnCode || "-"}

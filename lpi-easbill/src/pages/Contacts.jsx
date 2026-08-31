@@ -127,7 +127,7 @@ export default function Contacts() {
       const { data } = await getContacts(params);
       setContacts(data.contacts);
     } catch (err) {
-      setError("Contacts load karne mein error aaya");
+      setError("An error occurred while loading contacts.");
     } finally {
       setLoading(false);
     }

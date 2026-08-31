@@ -101,7 +101,7 @@ export default function PurchaseList() {
       const { data } = await getPurchaseInvoices(params);
       setPurchases(data.purchases);
     } catch (err) {
-      setError("Purchases load karne mein error aaya");
+      setError("An error occurred while loading purchases.");
     } finally {
       setLoading(false);
     }

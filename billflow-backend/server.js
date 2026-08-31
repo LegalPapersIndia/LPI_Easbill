@@ -66,6 +66,7 @@ import purchaseOrderRoutes from "./routes/purchaseOrderRoutes.js";
 import returnRoutes from "./routes/returnRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -73,7 +74,12 @@ cloudinaryConnect();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL, process.env.ADMIN_URL],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
@@ -88,6 +94,7 @@ app.use("/api/purchase-order", purchaseOrderRoutes);
 app.use("/api/returns", returnRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("BillFlow API is running...");

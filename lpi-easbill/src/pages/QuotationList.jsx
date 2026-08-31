@@ -122,7 +122,7 @@ export default function QuotationList() {
       const { data } = await getQuotations(params);
       setQuotations(data.quotations);
     } catch (err) {
-      setError("Quotations load karne mein error aaya");
+      setError("An error occurred while loading the quotations.");
     } finally {
       setLoading(false);
     }

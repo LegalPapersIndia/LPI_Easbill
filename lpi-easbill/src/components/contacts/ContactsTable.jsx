@@ -4,7 +4,7 @@ export default function ContactsTable({ contacts, onEdit, onDelete }) {
   if (contacts.length === 0) {
     return (
       <div className="bg-white border border-border rounded-xl p-10 text-center">
-        <p className="text-ink-muted text-sm">Koi contact nahi mila. Naya add karo ya search/filter check karo.</p>
+        <p className="text-ink-muted text-sm">No contact found. Add a new one or check the search/filter.</p>
       </div>
     );
   }

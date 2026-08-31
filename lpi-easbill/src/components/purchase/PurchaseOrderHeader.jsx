@@ -1,9 +1,11 @@
-// import { contactsList, businessSettings } from "../../data/dummyData";
 
-// export default function PurchaseOrderHeader({ poNo, date, onDateChange, validTillDays, onValidTillDaysChange, supplierId, onSupplierChange }) {
-//   const suppliersOnly = contactsList.filter((c) => c.contactType === "Supplier");
-//   const selectedSupplier = suppliersOnly.find((s) => s._id === supplierId);
-//   const isSameState = selectedSupplier?.state === businessSettings.state;
+
+// import { useBusiness } from "../../context/BusinessContext";
+
+// export default function PurchaseOrderHeader({ date, onDateChange, validTillDays, onValidTillDaysChange, supplierId, onSupplierChange, suppliers }) {
+//   const { businessSettings } = useBusiness();
+//   const selectedSupplier = suppliers.find((s) => s._id === supplierId);
+//   const isSameState = selectedSupplier?.state === businessSettings?.state;
 
 //   const validTillDate = new Date(date);
 //   validTillDate.setDate(validTillDate.getDate() + Number(validTillDays || 0));
@@ -11,16 +13,7 @@
 
 //   return (
 //     <div className="bg-white border border-border rounded-xl p-4 sm:p-5 mb-4">
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-//         <div>
-//           <label className="text-xs font-medium text-ink-muted">PO Number</label>
-//           <input
-//             value={poNo}
-//             readOnly
-//             className="w-full mt-1 border border-border rounded-lg px-3 py-2 text-sm bg-paper tabular-num text-ink font-medium"
-//           />
-//         </div>
-
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 //         <div>
 //           <label className="text-xs font-medium text-ink-muted">PO Date</label>
 //           <input
@@ -50,7 +43,7 @@
 //             className="w-full mt-1 border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-brand"
 //           >
 //             <option value="">Select supplier</option>
-//             {suppliersOnly.map((s) => (
+//             {suppliers.map((s) => (
 //               <option key={s._id} value={s._id}>{s.name}</option>
 //             ))}
 //           </select>
@@ -74,6 +67,7 @@
 
 
 import { useBusiness } from "../../context/BusinessContext";
+import SearchableSelect from "../common/SearchableSelect";
 
 export default function PurchaseOrderHeader({ date, onDateChange, validTillDays, onValidTillDaysChange, supplierId, onSupplierChange, suppliers }) {
   const { businessSettings } = useBusiness();
@@ -110,16 +104,19 @@ export default function PurchaseOrderHeader({ date, onDateChange, validTillDays,
 
         <div>
           <label className="text-xs font-medium text-ink-muted">Supplier</label>
-          <select
-            value={supplierId}
-            onChange={(e) => onSupplierChange(e.target.value)}
-            className="w-full mt-1 border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-brand"
-          >
-            <option value="">Select supplier</option>
-            {suppliers.map((s) => (
-              <option key={s._id} value={s._id}>{s.name}</option>
-            ))}
-          </select>
+          <div className="mt-1">
+            <SearchableSelect
+              value={supplierId}
+              onChange={onSupplierChange}
+              placeholder="Select supplier"
+              emptyText="No supplier found"
+              options={suppliers.map((s) => ({
+                value: s._id,
+                label: s.name,
+                subLabel: s.mobile || s.gstin || "",
+              }))}
+            />
+          </div>
         </div>
       </div>
 

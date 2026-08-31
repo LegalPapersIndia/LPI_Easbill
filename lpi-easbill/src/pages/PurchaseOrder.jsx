@@ -153,7 +153,7 @@ export default function PurchaseOrder() {
         setSuppliers(contactsRes.data.contacts);
         setItemsList(itemsRes.data.items);
       } catch (err) {
-        setError("Suppliers/Items load karne mein error aaya");
+        setError("Suppliers/An error occurred while loading items.");
       } finally {
         setLoadingData(false);
       }

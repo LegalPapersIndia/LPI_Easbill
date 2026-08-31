@@ -126,7 +126,7 @@ export default function Items() {
       const { data } = await getItems(params);
       setItems(data.items);
     } catch (err) {
-      setError("Items load karne mein error aaya");
+      setError("An error occurred while loading items.");
     } finally {
       setLoading(false);
     }
