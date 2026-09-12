@@ -90,7 +90,7 @@ import { stateCodeMap } from "../../data/dummyData";
 import { useBusiness } from "../../context/BusinessContext";
 import SearchableSelect from "../common/SearchableSelect";
 
-export default function PurchaseHeader({ originalInvoiceNo, onOriginalInvoiceNoChange, date, onDateChange, paymentTerms, onPaymentTermsChange, supplierId, onSupplierChange, suppliers }) {
+export default function PurchaseHeader({ originalInvoiceNo, onOriginalInvoiceNoChange, date, onDateChange, paymentTerms, onPaymentTermsChange, supplierId, onSupplierChange, suppliers, onAddNewSupplier }) {
   const { businessSettings } = useBusiness();
   const selectedSupplier = suppliers.find((s) => s._id === supplierId);
   const isSameState = selectedSupplier?.state === businessSettings?.state;
@@ -135,21 +135,30 @@ export default function PurchaseHeader({ originalInvoiceNo, onOriginalInvoiceNoC
       </div>
 
       <div className="mt-4">
-        <label className="text-xs font-medium text-ink-muted">Supplier</label>
-        <div className="w-full sm:w-72 mt-1">
-          <SearchableSelect
-            value={supplierId}
-            onChange={onSupplierChange}
-            placeholder="Select supplier"
-            emptyText="No supplier found"
-            options={suppliers.map((s) => ({
-              value: s._id,
-              label: s.name,
-              subLabel: s.mobile || s.gstin || "",
-            }))}
-          />
-        </div>
-      </div>
+  <label className="text-xs font-medium text-ink-muted">Supplier</label>
+  <div className="w-full sm:w-72 mt-1 flex gap-2">
+    <div className="flex-1">
+      <SearchableSelect
+        value={supplierId}
+        onChange={onSupplierChange}
+        placeholder="Select supplier"
+        emptyText="No supplier found"
+        options={suppliers.map((s) => ({
+          value: s._id,
+          label: s.name,
+          subLabel: s.mobile || s.gstin || "",
+        }))}
+      />
+    </div>
+    <button
+      type="button"
+      onClick={onAddNewSupplier}
+      className="shrink-0 border border-brand text-brand text-sm font-medium px-3 rounded-lg hover:bg-brand-light transition-colors"
+    >
+      + Add
+    </button>
+  </div>
+</div>
 
       {selectedSupplier && (
         <div className="mt-4 pt-4 border-t border-border">

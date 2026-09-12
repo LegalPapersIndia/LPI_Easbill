@@ -103,9 +103,6 @@
 //   );
 // }
 
-
-
-
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../components/layout/DashboardLayout";
@@ -118,8 +115,18 @@ import { useBusiness } from "../context/BusinessContext";
 import { getContacts } from "../api/contactsApi";
 import { getItems } from "../api/itemsApi";
 import { createQuotation } from "../api/quotationApi";
+import QuickAddCustomerModal from "../components/invoice/QuickAddCustomerModal";
 
-const newLine = () => ({ id: `line-${Date.now()}-${Math.random()}`, itemId: "", name: "", hsnCode: "", unit: "", qty: 1, rate: 0, gstPercent: 0 });
+const newLine = () => ({
+  id: `line-${Date.now()}-${Math.random()}`,
+  itemId: "",
+  name: "",
+  hsnCode: "",
+  unit: "",
+  qty: 1,
+  rate: 0,
+  gstPercent: 0,
+});
 
 export default function Quotation() {
   const navigate = useNavigate();
@@ -137,6 +144,7 @@ export default function Quotation() {
   const [lines, setLines] = useState([newLine()]);
   const [notes, setNotes] = useState("");
   const [terms, setTerms] = useState("");
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
 
   useEffect(() => {
     if (businessSettings?.defaultTerms) setTerms(businessSettings.defaultTerms);
@@ -147,7 +155,7 @@ export default function Quotation() {
       try {
         setLoadingData(true);
         const [contactsRes, itemsRes] = await Promise.all([
-          getContacts({ contactType: "Customer" }),
+          getContacts({ contactType: "Customer", hasGst: true }),
           getItems(),
         ]);
         setCustomers(contactsRes.data.contacts);
@@ -176,14 +184,23 @@ export default function Quotation() {
   }, [lines]);
 
   const handleAddLine = () => setLines((prev) => [...prev, newLine()]);
-  const handleRemoveLine = (id) => setLines((prev) => prev.filter((l) => l.id !== id));
+  const handleRemoveLine = (id) =>
+    setLines((prev) => prev.filter((l) => l.id !== id));
   const handleUpdateLine = (id, updates) =>
-    setLines((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates } : l)));
+    setLines((prev) =>
+      prev.map((l) => (l.id === id ? { ...l, ...updates } : l)),
+    );
+
+    const handleCustomerCreated = (newContact) => {
+  setCustomers((prev) => [newContact, ...prev]);
+  setCustomerId(newContact._id);
+};
 
   const handleSave = async () => {
     setError("");
     if (!customerId) return alert("Pehle customer select karo");
-    if (lines.every((l) => !l.itemId)) return alert("Kam se kam ek item add karo");
+    if (lines.every((l) => !l.itemId))
+      return alert("Kam se kam ek item add karo");
 
     const validLines = lines
       .filter((l) => l.itemId)
@@ -197,14 +214,23 @@ export default function Quotation() {
         gstPercent: Number(l.gstPercent),
       }));
 
-    const payload = { date, validDays, customerId, lines: validLines, notes, terms };
+    const payload = {
+      date,
+      validDays,
+      customerId,
+      lines: validLines,
+      notes,
+      terms,
+    };
 
     try {
       setSaving(true);
       await createQuotation(payload);
       navigate("/quotation");
     } catch (err) {
-      setError(err.response?.data?.message || "Quotation save karne mein error aaya");
+      setError(
+        err.response?.data?.message || "Quotation save karne mein error aaya",
+      );
     } finally {
       setSaving(false);
     }
@@ -213,7 +239,9 @@ export default function Quotation() {
   if (loadingData) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-20 text-ink-muted text-sm">Loading...</div>
+        <div className="flex items-center justify-center py-20 text-ink-muted text-sm">
+          Loading...
+        </div>
       </DashboardLayout>
     );
   }
@@ -222,8 +250,12 @@ export default function Quotation() {
     <DashboardLayout>
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">New Quotation</h1>
-          <p className="text-sm text-ink-muted mt-1">Sent a price estimate to the customer before the invoice.</p>
+          <h1 className="font-display font-semibold text-xl sm:text-2xl text-ink">
+            New Quotation
+          </h1>
+          <p className="text-sm text-ink-muted mt-1">
+            Sent a price estimate to the customer before the invoice.
+          </p>
         </div>
       </div>
 
@@ -235,15 +267,16 @@ export default function Quotation() {
 
       <InvoiceCompanyHeader />
 
-      <QuotationHeader
-        date={date}
-        onDateChange={setDate}
-        validDays={validDays}
-        onValidDaysChange={setValidDays}
-        customerId={customerId}
-        onCustomerChange={setCustomerId}
-        customers={customers}
-      />
+     <QuotationHeader
+  date={date}
+  onDateChange={setDate}
+  validDays={validDays}
+  onValidDaysChange={setValidDays}
+  customerId={customerId}
+  onCustomerChange={setCustomerId}
+  customers={customers}
+  onAddNewCustomer={() => setQuickAddOpen(true)}
+/>
 
       <InvoiceLineItems
         lines={lines}
@@ -276,6 +309,13 @@ export default function Quotation() {
           {saving ? "Saving..." : "Save Quotation"}
         </button>
       </div>
+
+      <QuickAddCustomerModal
+  open={quickAddOpen}
+  onClose={() => setQuickAddOpen(false)}
+  onCreated={handleCustomerCreated}
+/>
+
     </DashboardLayout>
   );
 }

@@ -23,13 +23,47 @@ export const createContact = async (req, res) => {
 // ─────────────────────────────────────────
 // GET ALL CONTACTS (search/filter ke saath)
 // ─────────────────────────────────────────
+// export const getContacts = async (req, res) => {
+//   try {
+//     const { search, contactType } = req.query;
+
+//     const query = { companyId: req.companyId };
+
+//     if (contactType) query.contactType = contactType;
+
+//     if (search) {
+//       query.$or = [
+//         { name: { $regex: search, $options: "i" } },
+//         { mobile: { $regex: search, $options: "i" } },
+//       ];
+//     }
+
+//     const contacts = await Contact.find(query).sort({ createdAt: -1 });
+
+//     res.status(200).json({ success: true, contacts });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// ─────────────────────────────────────────
+// GET ALL CONTACTS (search/filter ke saath)
+// ─────────────────────────────────────────
 export const getContacts = async (req, res) => {
   try {
-    const { search, contactType } = req.query;
+    const { search, contactType, hasGst } = req.query;
 
     const query = { companyId: req.companyId };
 
     if (contactType) query.contactType = contactType;
+
+    // Contacts list page ke liye: sirf woh contacts dikhao jinka GSTIN bhara hai.
+    // Jo Sales Invoice se "quick add" hue the aur GST khaali chhoda tha,
+    // woh yahan hide rahenge — lekin DB mein rahenge aur invoice mein poori
+    // tarah usable rahenge (koi filter invoice creation/customer selector pe nahi lagta).
+    if (hasGst === "true") {
+      query.gstin = { $exists: true, $nin: ["", null] };
+    }
 
     if (search) {
       query.$or = [

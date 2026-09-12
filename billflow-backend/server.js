@@ -67,6 +67,7 @@ import returnRoutes from "./routes/returnRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import gstRoutes from "./routes/gstRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -95,6 +96,7 @@ app.use("/api/returns", returnRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/gst", gstRoutes);
 
 app.get("/", (req, res) => {
   res.send("BillFlow API is running...");

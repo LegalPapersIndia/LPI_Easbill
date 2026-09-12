@@ -93,3 +93,52 @@ export const getDashboardData = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+// ── SALES TREND (separate, filterable) ──
+export const getSalesTrend = async (req, res) => {
+  try {
+    const companyId = req.companyId;
+    const { range } = req.query; // "monthly" (default) ya "daily"
+
+    const allSales = await SalesInvoice.find({ companyId, isDraft: false });
+    const now = new Date();
+    const salesTrend = [];
+
+    if (range === "daily") {
+      // ── Pichhle 30 din, day-wise ──
+      for (let i = 29; i >= 0; i--) {
+        const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+        const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 23, 59, 59);
+
+        const daySales = allSales
+          .filter((inv) => inv.date >= dayStart && inv.date <= dayEnd)
+          .reduce((sum, inv) => sum + inv.grandTotal, 0);
+
+        salesTrend.push({
+          label: day.toLocaleDateString("en-IN", { day: "2-digit", month: "short" }),
+          sales: daySales,
+        });
+      }
+    } else {
+      // ── Pichhle 6 mahine (default) ──
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      for (let i = 5; i >= 0; i--) {
+        const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthStart = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+        const monthEnd = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0, 23, 59, 59);
+
+        const monthSales = allSales
+          .filter((inv) => inv.date >= monthStart && inv.date <= monthEnd)
+          .reduce((sum, inv) => sum + inv.grandTotal, 0);
+
+        salesTrend.push({ label: monthNames[monthDate.getMonth()], sales: monthSales });
+      }
+    }
+
+    res.status(200).json({ success: true, salesTrend });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

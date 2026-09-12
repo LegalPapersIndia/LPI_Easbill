@@ -24,8 +24,7 @@ const navItems = [
     ],
   },
   { label: "Returns", icon: RotateCcw, path: "/returns" },
-  { label: "Payments", icon: Wallet, path: "/payments" },
-  // { label: "Reports", icon: BarChart3, path: "/reports" },
+  { label: "Pending Payment", icon: Wallet, path: "/payments" },
   { label: "Settings", icon: Settings, path: "/settings/business" },
 ];
 

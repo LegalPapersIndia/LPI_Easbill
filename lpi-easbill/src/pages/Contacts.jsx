@@ -117,21 +117,37 @@ export default function Contacts() {
   const [error, setError] = useState("");
 
   // ── CONTACTS FETCH KARO (search/filter change hone pe bhi) ──
-  const fetchContacts = useCallback(async () => {
-    try {
-      setLoading(true);
-      const params = {};
-      if (search) params.search = search;
-      if (typeFilter) params.contactType = typeFilter;
+  // const fetchContacts = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+  //     const params = {};
+  //     if (search) params.search = search;
+  //     if (typeFilter) params.contactType = typeFilter;
 
-      const { data } = await getContacts(params);
-      setContacts(data.contacts);
-    } catch (err) {
-      setError("An error occurred while loading contacts.");
-    } finally {
-      setLoading(false);
-    }
-  }, [search, typeFilter]);
+  //     const { data } = await getContacts(params);
+  //     setContacts(data.contacts);
+  //   } catch (err) {
+  //     setError("An error occurred while loading contacts.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [search, typeFilter]);
+
+  const fetchContacts = useCallback(async () => {
+  try {
+    setLoading(true);
+    const params = { hasGst: true }; // ← sirf GST wale contacts is list mein dikhao
+    if (search) params.search = search;
+    if (typeFilter) params.contactType = typeFilter;
+
+    const { data } = await getContacts(params);
+    setContacts(data.contacts);
+  } catch (err) {
+    setError("An error occurred while loading contacts.");
+  } finally {
+    setLoading(false);
+  }
+}, [search, typeFilter]);
 
   // ── STATS FETCH KARO (alag se, filter se independent) ──
   const fetchStats = async () => {

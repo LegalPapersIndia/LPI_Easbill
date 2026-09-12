@@ -157,6 +157,7 @@ import { businessSettings } from "../data/dummyData";
 import { getContacts } from "../api/contactsApi";
 import { getItems } from "../api/itemsApi";
 import { createSalesInvoice } from "../api/salesInvoiceApi";
+import QuickAddCustomerModal from "../components/invoice/QuickAddCustomerModal";
 
 const newLine = () => ({ id: `line-${Date.now()}-${Math.random()}`, itemId: "", name: "", hsnCode: "", unit: "", qty: 1, rate: 0, gstPercent: 0 });
 
@@ -179,16 +180,16 @@ export default function SalesInvoice() {
   const [paymentMode, setPaymentMode] = useState("Cash");
   const [notes, setNotes] = useState("");
   const [terms, setTerms] = useState(businessSettings.defaultTerms);
-
+const [quickAddOpen, setQuickAddOpen] = useState(false);
   // ── CUSTOMERS + ITEMS FETCH KARO ──
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoadingData(true);
-        const [contactsRes, itemsRes] = await Promise.all([
-          getContacts({ contactType: "Customer" }),
-          getItems(),
-        ]);
+       const [contactsRes, itemsRes] = await Promise.all([
+  getContacts({ contactType: "Customer", hasGst: true }), // ← hasGst add kiya
+  getItems(),
+]);
         setCustomers(contactsRes.data.contacts);
         setItemsList(itemsRes.data.items);
       } catch (err) {
@@ -225,6 +226,11 @@ export default function SalesInvoice() {
   const handleRemoveLine = (id) => setLines((prev) => prev.filter((l) => l.id !== id));
   const handleUpdateLine = (id, updates) =>
     setLines((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates } : l)));
+
+  const handleCustomerCreated = (newContact) => {
+  setCustomers((prev) => [newContact, ...prev]);
+  setCustomerId(newContact._id);
+};
 
   const handleSave = async (isDraft) => {
     setError("");
@@ -291,15 +297,16 @@ export default function SalesInvoice() {
 
       <InvoiceCompanyHeader />
 
-      <InvoiceHeader
-        date={date}
-        onDateChange={setDate}
-        paymentTerms={paymentTerms}
-        onPaymentTermsChange={setPaymentTerms}
-        customerId={customerId}
-        onCustomerChange={setCustomerId}
-        customers={customers}
-      />
+   <InvoiceHeader
+  date={date}
+  onDateChange={setDate}
+  paymentTerms={paymentTerms}
+  onPaymentTermsChange={setPaymentTerms}
+  customerId={customerId}
+  onCustomerChange={setCustomerId}
+  customers={customers}
+  onAddNewCustomer={() => setQuickAddOpen(true)}
+/>
 
       <InvoiceLineItems
         lines={lines}
@@ -348,6 +355,11 @@ export default function SalesInvoice() {
           {saving ? "Saving..." : "Save Invoice"}
         </button>
       </div>
+      <QuickAddCustomerModal
+  open={quickAddOpen}
+  onClose={() => setQuickAddOpen(false)}
+  onCreated={handleCustomerCreated}
+/>
     </DashboardLayout>
   );
 }

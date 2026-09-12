@@ -67,7 +67,7 @@
 import { useBusiness } from "../../context/BusinessContext";
 import SearchableSelect from "../common/SearchableSelect";
 
-export default function QuotationHeader({ date, onDateChange, validDays, onValidDaysChange, customerId, onCustomerChange, customers }) {
+export default function QuotationHeader({ date, onDateChange, validDays, onValidDaysChange, customerId, onCustomerChange, customers, onAddNewCustomer }) {
   const { businessSettings } = useBusiness();
   const selectedCustomer = customers.find((c) => c._id === customerId);
   const isSameState = selectedCustomer?.state === businessSettings?.state;
@@ -100,22 +100,32 @@ export default function QuotationHeader({ date, onDateChange, validDays, onValid
           <p className="text-[11px] text-ink-muted mt-1">Valid till: <span className="tabular-num font-medium text-ink">{validityDateStr}</span></p>
         </div>
 
-        <div>
-          <label className="text-xs font-medium text-ink-muted">Customer</label>
-          <div className="mt-1">
-            <SearchableSelect
-              value={customerId}
-              onChange={onCustomerChange}
-              placeholder="Select customer"
-              emptyText="No customer found"
-              options={customers.map((c) => ({
-                value: c._id,
-                label: c.name,
-                subLabel: c.mobile || c.gstin || "",
-              }))}
-            />
-          </div>
-        </div>
+     <div>
+  <label className="text-xs font-medium text-ink-muted">Customer</label>
+  <div className="mt-1 flex gap-2">
+    <div className="flex-1">
+      <SearchableSelect
+        value={customerId}
+        onChange={onCustomerChange}
+        placeholder="Select customer"
+        emptyText="No customer found"
+        options={customers.map((c) => ({
+          value: c._id,
+          label: c.name,
+          subLabel: c.mobile || c.gstin || "",
+        }))}
+      />
+    </div>
+    <button
+      type="button"
+      onClick={onAddNewCustomer}
+      className="shrink-0 border border-brand text-brand text-sm font-medium px-3 rounded-lg hover:bg-brand-light transition-colors"
+    >
+      + Add
+    </button>
+  </div>
+</div>
+
       </div>
 
       {selectedCustomer && (

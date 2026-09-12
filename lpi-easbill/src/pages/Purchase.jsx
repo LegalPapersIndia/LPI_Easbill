@@ -129,6 +129,7 @@ import { useBusiness } from "../context/BusinessContext";
 import { getContacts } from "../api/contactsApi";
 import { getItems } from "../api/itemsApi";
 import { createPurchaseInvoice } from "../api/purchaseInvoiceApi";
+import QuickAddCustomerModal from "../components/invoice/QuickAddCustomerModal";
 
 const newLine = () => ({ id: `line-${Date.now()}-${Math.random()}`, itemId: "", name: "", hsnCode: "", unit: "", qty: 1, rate: 0, gstPercent: 0 });
 
@@ -151,6 +152,7 @@ export default function Purchase() {
   const [paymentMode, setPaymentMode] = useState("Cash");
   const [notes, setNotes] = useState("");
   const [terms, setTerms] = useState("");
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
 
   useEffect(() => {
     if (businessSettings?.defaultTerms) setTerms(businessSettings.defaultTerms);
@@ -160,10 +162,10 @@ export default function Purchase() {
     const fetchData = async () => {
       try {
         setLoadingData(true);
-        const [contactsRes, itemsRes] = await Promise.all([
-          getContacts({ contactType: "Supplier" }),
-          getItems(),
-        ]);
+       const [contactsRes, itemsRes] = await Promise.all([
+  getContacts({ contactType: "Supplier", hasGst: true }),
+  getItems(),
+]);
         setSuppliers(contactsRes.data.contacts);
         setItemsList(itemsRes.data.items);
       } catch (err) {
@@ -193,6 +195,11 @@ export default function Purchase() {
   const handleRemoveLine = (id) => setLines((prev) => prev.filter((l) => l.id !== id));
   const handleUpdateLine = (id, updates) =>
     setLines((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates } : l)));
+
+  const handleSupplierCreated = (newContact) => {
+  setSuppliers((prev) => [newContact, ...prev]);
+  setSupplierId(newContact._id);
+};
 
   const handleSave = async () => {
     setError("");
@@ -252,17 +259,18 @@ export default function Purchase() {
 
       <InvoiceCompanyHeader />
 
-      <PurchaseHeader
-        originalInvoiceNo={originalInvoiceNo}
-        onOriginalInvoiceNoChange={setOriginalInvoiceNo}
-        date={date}
-        onDateChange={setDate}
-        paymentTerms={paymentTerms}
-        onPaymentTermsChange={setPaymentTerms}
-        supplierId={supplierId}
-        onSupplierChange={setSupplierId}
-        suppliers={suppliers}
-      />
+     <PurchaseHeader
+  originalInvoiceNo={originalInvoiceNo}
+  onOriginalInvoiceNoChange={setOriginalInvoiceNo}
+  date={date}
+  onDateChange={setDate}
+  paymentTerms={paymentTerms}
+  onPaymentTermsChange={setPaymentTerms}
+  supplierId={supplierId}
+  onSupplierChange={setSupplierId}
+  suppliers={suppliers}
+  onAddNewSupplier={() => setQuickAddOpen(true)}
+/>
 
       <PurchaseLineItems
         lines={lines}
@@ -300,6 +308,14 @@ export default function Purchase() {
           {saving ? "Saving..." : "Save Purchase Invoice"}
         </button>
       </div>
+     
+     <QuickAddCustomerModal
+  open={quickAddOpen}
+  onClose={() => setQuickAddOpen(false)}
+  onCreated={handleSupplierCreated}
+  contactType="Supplier"
+/>
+
     </DashboardLayout>
   );
 }
